@@ -17,7 +17,7 @@ Frontend – Vue.js SPA, обслуживается Nginx на порту 80
     JWT_SECRET=ваш_ключ
 
 3. Запустите приложение:
-    docker-compose --profile dev up -d
+    docker-compose up -d
     Доступные профили: dev, prod.
 
 4. Откройте в браузере: http://localhost
@@ -26,7 +26,7 @@ Frontend – Vue.js SPA, обслуживается Nginx на порту 80
 docker-compose build --pull
 
 # Запуск с масштабированием. Балансировщик nginx автоматически распределит нагрузку между репликами благодаря Docker DNS и конфигурации upstream.
-docker-compose --profile dev up -d --scale backend=3 --scale frontend=2
+docker-compose --scale backend=3 --scale frontend=2
 
 
 Компонент	Базовый образ	    Размер	    Описание
