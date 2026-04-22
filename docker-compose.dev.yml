@@ -4,25 +4,22 @@ x-logging: &default-logging
     max-size: "10m"
     max-file: "3"
 
-secrets:
-  jwt_secret:
-    file: ./secrets/jwt_secret.txt
-
 services:
   backend:
-    image: ${DOCKER_USER}/docker-project-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081" 
     container_name: momo-backend
     restart: unless-stopped
     networks:
       - momo-net
-    expose: ["8081"]
     environment:
-      - LOG_LEVEL=info
-      - JWT_SECRET_FILE=/run/secrets/jwt_secret
-    secrets:
-      - jwt_secret
+      - LOG_LEVEL=debug
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
-      - backend-data:/app/data
+      - ./backend:/app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
       interval: 30s
@@ -31,7 +28,7 @@ services:
       start_period: 10s
     deploy:
       mode: replicated
-      replicas: 3
+      replicas: 1
       resources:
         limits:
           cpus: '0.50'
@@ -49,18 +46,20 @@ services:
     logging: *default-logging
 
   frontend:
-    image: ${DOCKER_USER}/docker-project-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_API_URL: http://backend:8081
     container_name: momo-frontend
     restart: unless-stopped
     networks:
       - momo-net
+    ports:
+      - "80:80"
     depends_on:
       backend:
         condition: service_healthy
-    ports: 
-      - "80:80"
-    environment:
-      - VUE_APP_API_URL=/api
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 30s
@@ -69,7 +68,7 @@ services:
       start_period: 10s
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
       resources:
         limits:
           cpus: '0.50'

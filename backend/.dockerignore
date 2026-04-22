@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+README.md
+LICENSE
+.vscode
+.idea
+*.tmp
+*.log
+Dockerfile
+.dockerignore
+/bin/
+/pkg/
