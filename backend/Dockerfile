@@ -25,6 +25,10 @@ WORKDIR /app
 
 COPY --from=builder /app .
 
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh && \
+    chown appuser:appgroup /docker-entrypoint.sh
+
 RUN chown -R appuser:appgroup /app
 
 USER appuser
@@ -34,5 +38,5 @@ EXPOSE 8081
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8081/health || exit 1
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["./app"]
