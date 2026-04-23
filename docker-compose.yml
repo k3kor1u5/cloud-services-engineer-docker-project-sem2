@@ -4,10 +4,6 @@ x-logging: &default-logging
     max-size: "10m"
     max-file: "3"
 
-secrets:
-  jwt_secret:
-    file: ./secrets/jwt_secret.txt
-
 services:
   backend:
     image: ${DOCKER_USER}/docker-project-backend:latest
@@ -17,9 +13,7 @@ services:
     expose: ["8081"]
     environment:
       - LOG_LEVEL=info
-      - JWT_SECRET_FILE=/run/secrets/jwt_secret
-    secrets:
-      - jwt_secret
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - backend-data:/app/data
     healthcheck:
