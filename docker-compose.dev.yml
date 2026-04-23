@@ -18,24 +18,12 @@ services:
     environment:
       - LOG_LEVEL=debug
       - JWT_SECRET=${JWT_SECRET}
-    volumes:
-      - ./backend:/app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 256M
-        reservations:
-          cpus: '0.25'
-          memory: 128M
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -66,16 +54,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.50'
-          memory: 256M
-        reservations:
-          cpus: '0.25'
-          memory: 128M
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -90,6 +68,3 @@ networks:
   momo-net:
     driver: bridge
     name: momo-net
-
-volumes:
-  backend-data:
