@@ -11,7 +11,6 @@ secrets:
 services:
   backend:
     image: ${DOCKER_USER}/docker-project-backend:latest
-    container_name: momo-backend
     restart: unless-stopped
     networks:
       - momo-net
@@ -50,7 +49,6 @@ services:
 
   frontend:
     image: ${DOCKER_USER}/docker-project-frontend:latest
-    container_name: momo-frontend
     restart: unless-stopped
     networks:
       - momo-net
